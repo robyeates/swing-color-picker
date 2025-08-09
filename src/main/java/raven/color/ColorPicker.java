@@ -72,7 +72,13 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
 
     private Component createColorPalette() {
         if (colorPalette == null) {
-            colorPalette = new ColorPaletteComponent(this, new TailwindColorPaletteData(), new DefaultColorPaletteItemPainter());
+            colorPalette = new ColorPaletteComponent(new TailwindColorPaletteData(), new DefaultColorPaletteItemPainter());
+            colorPalette.addChangeListener(e -> {
+                Color color = colorPalette.getColorAt(colorPalette.getSelectedIndex());
+                if (color != null) {
+                    getModel().setSelectedColor(color);
+                }
+            });
         }
         return colorPalette;
     }

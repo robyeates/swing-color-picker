@@ -2,11 +2,12 @@ package raven.color.component;
 
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
-import raven.color.ColorPicker;
 import raven.color.component.utils.ColorPaletteData;
 import raven.color.component.utils.ColorPaletteItemPainter;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,15 +17,13 @@ import java.util.List;
 public class ColorPaletteComponent extends JComponent {
 
     private final List<Item> items = new ArrayList<>();
-    private final ColorPicker colorPicker;
     private ColorPaletteData colorData;
     private ColorPaletteItemPainter itemPainter;
 
     private int hoverIndex = -1;
     private int selectedIndex = -1;
 
-    public ColorPaletteComponent(ColorPicker colorPicker, ColorPaletteData colorData, ColorPaletteItemPainter itemPainter) {
-        this.colorPicker = colorPicker;
+    public ColorPaletteComponent(ColorPaletteData colorData, ColorPaletteItemPainter itemPainter) {
         this.colorData = colorData;
         this.itemPainter = itemPainter;
         init();
@@ -38,12 +37,8 @@ public class ColorPaletteComponent extends JComponent {
             public void mouseReleased(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     int index = getIndexOf(e.getPoint());
-                    if (hoverIndex == index && selectedIndex != index) {
-                        int oldIndex = selectedIndex;
-                        selectedIndex = index;
-                        repaintAt(selectedIndex);
-                        repaintAt(oldIndex);
-                        selectedIndex(selectedIndex);
+                    if (hoverIndex == index) {
+                        setSelectedIndex(index);
                     }
                     if (index != hoverIndex) {
                         int oldHover = hoverIndex;
@@ -88,6 +83,35 @@ public class ColorPaletteComponent extends JComponent {
         repaint();
     }
 
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
+
+    public void setSelectedIndex(int selectedIndex) {
+        int oldIndex = this.selectedIndex;
+        this.selectedIndex = selectedIndex;
+        if (oldIndex != selectedIndex) {
+            repaintAt(oldIndex);
+        }
+        repaintAt(selectedIndex);
+        selectedIndex(selectedIndex);
+    }
+
+    public Color getColorAt(int index) {
+        if (index >= 0 && index < items.size()) {
+            return items.get(index).getColor();
+        }
+        return null;
+    }
+
+    public void addChangeListener(ChangeListener listener) {
+        listenerList.add(ChangeListener.class, listener);
+    }
+
+    public void removeChangeListener(ChangeListener listener) {
+        listenerList.remove(ChangeListener.class, listener);
+    }
+
     private int getIndexOf(Point point) {
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
@@ -114,7 +138,7 @@ public class ColorPaletteComponent extends JComponent {
 
     private void selectedIndex(int index) {
         if (index >= 0 && index < items.size()) {
-            colorPicker.getModel().setSelectedColor(items.get(index).getColor());
+            fireMonthChanged(new ChangeEvent(this));
         }
     }
 
@@ -164,6 +188,15 @@ public class ColorPaletteComponent extends JComponent {
         Dimension itemSize = UIScale.scale(itemPainter.getItemSize());
         int height = (maxRow * itemSize.height) + ((maxRow - 1) * gap) + (insets.top + insets.bottom);
         return new Dimension(50, height);
+    }
+
+    public void fireMonthChanged(ChangeEvent event) {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == ChangeListener.class) {
+                ((ChangeListener) listeners[i + 1]).stateChanged(event);
+            }
+        }
     }
 
     private class Item {
