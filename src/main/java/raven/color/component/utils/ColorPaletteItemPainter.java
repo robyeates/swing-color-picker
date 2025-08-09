@@ -10,5 +10,7 @@ public interface ColorPaletteItemPainter {
 
     int getItemGap();
 
-    void paintItem(Graphics g, Color color, float width, float height);
+    int getItemBorderSize();
+
+    void paintItem(Graphics g, Color color, int width, int height, boolean isSelected, boolean hasFocus);
 }
