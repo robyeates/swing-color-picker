@@ -6,6 +6,7 @@ import net.miginfocom.swing.MigLayout;
 import raven.color.ColorPicker;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class TestColor extends JFrame {
@@ -16,14 +17,23 @@ public class TestColor extends JFrame {
         setSize(new Dimension(800, 800));
         setLocationRelativeTo(null);
 
-        setLayout(new MigLayout("al center center,wrap"));
+        setLayout(new MigLayout("al center center,wrap", "[fill]"));
 
         ColorPicker colorPicker = new ColorPicker();
         colorPicker.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:10;" +
                 "[light]background:#E6E6E6;" +
                 "[dark]background:#363636;");
+
+
         add(colorPicker);
+
+        JPanel panelOption = new JPanel(new MigLayout("wrap"));
+        panelOption.setBorder(new TitledBorder("Options"));
+
+        JCheckBox ch = new JCheckBox("Enable Palette", true);
+        ch.addActionListener(e -> colorPicker.setColorPaletteEnabled(ch.isSelected()));
+        panelOption.add(ch);
 
         JButton cmd = new JButton("show as dialog");
         cmd.addActionListener(e -> {
@@ -32,10 +42,13 @@ public class TestColor extends JFrame {
                 cmd.setBackground(color);
             }
         });
-        add(cmd);
+        panelOption.add(cmd);
+
         colorPicker.addColorChangedListener((color, event) -> {
             cmd.setBackground(color);
         });
+
+        add(panelOption);
     }
 
     public static void main(String[] args) {

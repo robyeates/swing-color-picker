@@ -31,27 +31,26 @@ public class ColorPaletteComponent extends JComponent {
     }
 
     private void init() {
-        setBorder(new ScaledEmptyBorder(10, 10, 10, 10));
+        setBorder(new ScaledEmptyBorder(10, 10, 5, 10));
         MouseAdapter mouseListener = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                int index = getIndexOf(e.getPoint());
-                if (hoverIndex == index && selectedIndex != index) {
-                    int oldIndex = selectedIndex;
-                    selectedIndex = index;
-                    repaintAt(selectedIndex);
-                    repaintAt(oldIndex);
-                    selectedIndex(selectedIndex);
-                }
-                if (index != hoverIndex) {
-                    int oldHover = hoverIndex;
-                    hoverIndex = index;
-                    repaintAt(oldHover);
-                    repaintAt(hoverIndex);
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    int index = getIndexOf(e.getPoint());
+                    if (hoverIndex == index && selectedIndex != index) {
+                        int oldIndex = selectedIndex;
+                        selectedIndex = index;
+                        repaintAt(selectedIndex);
+                        repaintAt(oldIndex);
+                        selectedIndex(selectedIndex);
+                    }
+                    if (index != hoverIndex) {
+                        int oldHover = hoverIndex;
+                        hoverIndex = index;
+                        repaintAt(oldHover);
+                        repaintAt(hoverIndex);
+                    }
                 }
             }
 
@@ -77,6 +76,7 @@ public class ColorPaletteComponent extends JComponent {
 
     public void setColorData(ColorPaletteData colorData) {
         this.colorData = colorData;
+        repaint();
     }
 
     public ColorPaletteItemPainter getItemPainter() {
@@ -85,6 +85,7 @@ public class ColorPaletteComponent extends JComponent {
 
     public void setItemPainter(ColorPaletteItemPainter itemPainter) {
         this.itemPainter = itemPainter;
+        repaint();
     }
 
     private int getIndexOf(Point point) {

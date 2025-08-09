@@ -36,7 +36,7 @@ public class ColorField extends JComponent implements PropertyChangeListener {
     }
 
     private void init() {
-        setLayout(new MigLayout("insets n 10 10 10,wrap 5,gapy 5,fillx", "[center,grow 0][center,grow 0][center,grow 0][center,grow 0][fill]"));
+        setLayout(new MigLayout("insets n 10 5 10,wrap 5,gapy 5,fillx", "[center,grow 0][center,grow 0][center,grow 0][center,grow 0][fill]"));
 
         txtRed = createTextField();
         txtGreen = createTextField();

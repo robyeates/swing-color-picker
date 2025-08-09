@@ -20,6 +20,8 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
     private ColorField colorField;
     private ColorPaletteComponent colorPalette;
 
+    private boolean colorPaletteEnabled = true;
+
     public ColorPicker() {
         this(new ColorPickerModel());
     }
@@ -33,7 +35,7 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
     }
 
     private void init(ColorPickerModel model, Color initialColor) {
-        setLayout(new MigLayout("wrap,fillx,gap 0,insets 0", "[fill,280]"));
+        setLayout(new MigLayout("wrap,fillx,gap 0,insets 0 0 5 0", "[fill,280]"));
 
         setModel(model);
         colorComponent = new ColorComponent(this);
@@ -51,8 +53,9 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
         add(panel);
 
         add(colorField);
-        add(createColorPalette());
-
+        if (isColorPaletteEnabled()) {
+            add(createColorPalette());
+        }
         model.setSelectedColor(initialColor);
     }
 
@@ -68,8 +71,9 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
     }
 
     private Component createColorPalette() {
-        colorPalette = new ColorPaletteComponent(this, new TailwindColorPaletteData(), new DefaultColorPaletteItemPainter());
-
+        if (colorPalette == null) {
+            colorPalette = new ColorPaletteComponent(this, new TailwindColorPaletteData(), new DefaultColorPaletteItemPainter());
+        }
         return colorPalette;
     }
 
@@ -97,6 +101,29 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
 
     public void setSelectedColor(Color color) {
         getModel().setSelectedColor(color);
+    }
+
+    public boolean isColorPaletteEnabled() {
+        return colorPaletteEnabled;
+    }
+
+    public void setColorPaletteEnabled(boolean enabled) {
+        if (this.colorPaletteEnabled != enabled) {
+            this.colorPaletteEnabled = enabled;
+            if (!enabled) {
+                if (colorPalette != null) {
+                    remove(colorPalette);
+                    revalidate();
+                }
+            } else {
+                add(createColorPalette());
+                revalidate();
+            }
+        }
+    }
+
+    public ColorPaletteComponent getColorPalette() {
+        return colorPalette;
     }
 
     public void addColorChangedListener(ColorChangedListener listener) {
