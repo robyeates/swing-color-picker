@@ -138,7 +138,7 @@ public class ColorPaletteComponent extends JComponent {
 
     private void selectedIndex(int index) {
         if (index >= 0 && index < items.size()) {
-            fireMonthChanged(new ChangeEvent(this));
+            fireSelectionChanged(new ChangeEvent(this));
         }
     }
 
@@ -190,7 +190,7 @@ public class ColorPaletteComponent extends JComponent {
         return new Dimension(50, height);
     }
 
-    public void fireMonthChanged(ChangeEvent event) {
+    public void fireSelectionChanged(ChangeEvent event) {
         Object[] listeners = listenerList.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == ChangeListener.class) {
