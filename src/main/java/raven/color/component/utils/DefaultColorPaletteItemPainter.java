@@ -3,6 +3,7 @@ package raven.color.component.utils;
 import com.formdev.flatlaf.util.UIScale;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 
 public class DefaultColorPaletteItemPainter implements ColorPaletteItemPainter {
@@ -33,6 +34,10 @@ public class DefaultColorPaletteItemPainter implements ColorPaletteItemPainter {
         return 8;
     }
 
+    protected Color getBorderColor(Color color) {
+        return null;
+    }
+
     @Override
     public void paintItem(Graphics g, Color color, int width, int height, boolean isSelected, boolean hasFocus) {
         Graphics2D g2 = (Graphics2D) g;
@@ -44,17 +49,28 @@ public class DefaultColorPaletteItemPainter implements ColorPaletteItemPainter {
         int border = UIScale.scale(getItemBorderSize());
         if (border > 0) {
             g2.translate(-border, -border);
-            paintItemBorder(g2, width + border * 2, height + border * 2, isSelected, hasFocus);
+            paintItemBorder(g2, color, width + border * 2, height + border * 2, isSelected, hasFocus);
         }
-
     }
 
-    protected void paintItemBorder(Graphics2D g2, int width, int height, boolean isSelected, boolean hasFocus) {
+    protected void paintItemBorder(Graphics2D g2, Color color, int width, int height, boolean isSelected, boolean hasFocus) {
         if (!(hasFocus)) {
             return;
         }
-        g2.setComposite(AlphaComposite.SrcOver.derive(0.3f));
+
+        Color borderColor = getBorderColor(color);
+        if (borderColor != null) {
+            g2.setColor(borderColor);
+        }
+
+        g2.setComposite(AlphaComposite.SrcOver.derive(0.35f));
+        int border = UIScale.scale(getItemBorderSize());
         float arc = UIScale.scale(getArc());
-        g2.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        Area area = new Area(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+        float inArc = Math.max(arc - border, 0);
+
+        area.subtract(new Area(new RoundRectangle2D.Float(border, border, width - border * 2, height - border * 2, inArc, inArc)));
+        g2.fill(area);
     }
 }

@@ -262,6 +262,12 @@ public class MaterialColorPaletteData extends TailwindColorPaletteData {
             public int getItemGap() {
                 return 0;
             }
+
+            @Override
+            protected Color getBorderColor(Color color) {
+                float[] hub = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+                return Color.getHSBColor(hub[0], 1f, 1f);
+            }
         };
     }
 }

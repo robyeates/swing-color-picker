@@ -147,11 +147,26 @@ public class ColorPaletteComponent extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         prepareItemSize();
+        Item selectedItem = null;
+        Item focusedItem = null;
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
             if (item != null) {
-                item.paint(g);
+                if (item.isSelected()) {
+                    selectedItem = item;
+                } else if (item.isHasFocus()) {
+                    focusedItem = item;
+                } else {
+                    item.paint(g);
+                }
             }
+        }
+        // paint selected and focused item
+        if (selectedItem != null) {
+            selectedItem.paint(g);
+        }
+        if (focusedItem != null) {
+            focusedItem.paint(g);
         }
         super.paintComponent(g);
     }
@@ -235,11 +250,19 @@ public class ColorPaletteComponent extends JComponent {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setClip(g.getClip());
                 g2.translate(size.x, size.y);
-                boolean isSelected = selectedIndex == index;
-                boolean hasFocus = hoverIndex == index;
+                boolean isSelected = isSelected();
+                boolean hasFocus = isHasFocus();
                 itemPainter.paintItem(g2, color, size.width, size.height, isSelected, hasFocus);
                 g2.dispose();
             }
+        }
+
+        public boolean isSelected() {
+            return selectedIndex == index;
+        }
+
+        public boolean isHasFocus() {
+            return hoverIndex == index;
         }
     }
 }
