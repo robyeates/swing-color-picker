@@ -241,7 +241,7 @@ public class MaterialColorPaletteData extends TailwindColorPaletteData {
     public ColorPaletteItemPainter getPainter() {
 
         return new DefaultColorPaletteItemPainter() {
-            private final Dimension itemSize = new Dimension(26, 20);
+            private final Dimension itemSize = new Dimension(26, 15);
 
             @Override
             public Dimension getItemSize() {

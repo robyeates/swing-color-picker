@@ -150,7 +150,7 @@ public class TailwindColorPaletteData implements ColorPaletteData {
 
     public ColorPaletteItemPainter getPainter() {
         return new DefaultColorPaletteItemPainter() {
-            private final Dimension itemSize = new Dimension(28, 18);
+            private final Dimension itemSize = new Dimension(28, 15);
 
             @Override
             public Dimension getItemSize() {
