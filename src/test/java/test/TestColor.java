@@ -4,9 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import net.miginfocom.swing.MigLayout;
 import raven.color.ColorPicker;
-import raven.color.component.utils.DefaultColorPaletteItemPainter;
-import raven.color.component.utils.TailwindColorPaletteData;
-import test.utils.MaterialColorPaletteData;
+import raven.color.component.ColorPaletteType;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -41,6 +39,7 @@ public class TestColor extends JFrame {
 
     // option
     private JCheckBox chEnablePalette;
+    private JRadioButton rDefaultColor;
     private JRadioButton rTailwindColor;
     private JRadioButton rMaterialColor;
 
@@ -52,33 +51,30 @@ public class TestColor extends JFrame {
         panelPalette.setBorder(new TitledBorder("Options Color Palette"));
 
         chEnablePalette = new JCheckBox("Enable Palette", true);
-        rTailwindColor = new JRadioButton("Tailwind Color", true);
-        rMaterialColor = new JRadioButton("Material Color (custom)");
+        rDefaultColor = new JRadioButton("Default Color", true);
+        rTailwindColor = new JRadioButton("Tailwind Color");
+        rMaterialColor = new JRadioButton("Material Color");
 
         ButtonGroup groupPalette = new ButtonGroup();
 
+        groupPalette.add(rDefaultColor);
         groupPalette.add(rTailwindColor);
         groupPalette.add(rMaterialColor);
 
         chEnablePalette.addActionListener(e -> {
             boolean enable = chEnablePalette.isSelected();
             colorPicker.setColorPaletteEnabled(enable);
+            rDefaultColor.setEnabled(enable);
             rTailwindColor.setEnabled(enable);
             rMaterialColor.setEnabled(enable);
         });
-        rTailwindColor.addActionListener(e -> {
-            if (rTailwindColor.isSelected()) {
-                applyColorStyle(colorPicker);
-            }
-        });
+        rDefaultColor.addActionListener(e -> applyColorStyle(colorPicker));
+        rTailwindColor.addActionListener(e -> applyColorStyle(colorPicker));
+        rMaterialColor.addActionListener(e -> applyColorStyle(colorPicker));
 
-        rMaterialColor.addActionListener(e -> {
-            if (rMaterialColor.isSelected()) {
-                applyColorStyle(colorPicker);
-            }
-        });
+        panelPalette.add(chEnablePalette, "wrap");
 
-        panelPalette.add(chEnablePalette);
+        panelPalette.add(rDefaultColor);
         panelPalette.add(rTailwindColor);
         panelPalette.add(rMaterialColor);
 
@@ -102,16 +98,14 @@ public class TestColor extends JFrame {
     }
 
     private void applyColorStyle(ColorPicker colorPicker) {
-        if (rTailwindColor.isSelected()) {
-            colorPicker.getColorPalette().setColorData(new TailwindColorPaletteData());
-            colorPicker.getColorPalette().setItemPainter(new DefaultColorPaletteItemPainter());
+        if (rDefaultColor.isSelected()) {
+            colorPicker.applyColorPaletteType(ColorPaletteType.DEFAULT);
+        } else if (rTailwindColor.isSelected()) {
+            colorPicker.applyColorPaletteType(ColorPaletteType.TAILWIND);
         } else if (rMaterialColor.isSelected()) {
-            MaterialColorPaletteData materialColorPaletteData = new MaterialColorPaletteData();
-            colorPicker.getColorPalette().setColorData(materialColorPaletteData);
-            colorPicker.getColorPalette().setItemPainter(materialColorPaletteData.getPainter());
+            colorPicker.applyColorPaletteType(ColorPaletteType.MATERIAL);
         }
     }
-
 
     public static void main(String[] args) {
         FlatIntelliJLaf.setup();

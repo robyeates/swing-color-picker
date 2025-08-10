@@ -2,8 +2,8 @@ package raven.color;
 
 import net.miginfocom.swing.MigLayout;
 import raven.color.component.*;
+import raven.color.component.utils.DefaultColorPaletteData;
 import raven.color.component.utils.DefaultColorPaletteItemPainter;
-import raven.color.component.utils.TailwindColorPaletteData;
 import raven.color.event.ColorChangeEvent;
 import raven.color.event.ColorChangedListener;
 
@@ -76,7 +76,7 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
 
     private Component createColorPalette() {
         if (colorPalette == null) {
-            colorPalette = new ColorPaletteComponent(new TailwindColorPaletteData(), new DefaultColorPaletteItemPainter());
+            colorPalette = new ColorPaletteComponent(new DefaultColorPaletteData(), new DefaultColorPaletteItemPainter());
             colorPalette.addChangeListener(e -> {
                 Color color = colorPalette.getColorAt(colorPalette.getSelectedIndex());
                 if (color != null) {
@@ -134,6 +134,12 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
 
     public ColorPaletteComponent getColorPalette() {
         return colorPalette;
+    }
+
+    public void applyColorPaletteType(ColorPaletteType type) {
+        if (type != null) {
+            type.apply(this);
+        }
     }
 
     public void addColorChangedListener(ColorChangedListener listener) {
