@@ -142,6 +142,10 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
 
     public static Color showDialog(Component component, String title, Color initialColor) {
         ColorPicker colorPicker = new ColorPicker(initialColor != null ? initialColor : Color.WHITE);
+        return showDialog(component, title, colorPicker);
+    }
+
+    public static Color showDialog(Component component, String title, ColorPicker colorPicker) {
         int option = JOptionPane.showConfirmDialog(component, colorPicker,
                 title,
                 JOptionPane.OK_CANCEL_OPTION,
