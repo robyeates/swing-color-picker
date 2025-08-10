@@ -40,7 +40,6 @@ Add the snapshot version
 ColorPicker colorPicker = new ColorPicker();
 
 // create event color changed
-
 colorPicker.addColorChangedListener((color, event) -> {
     // color changed
 });
@@ -50,7 +49,7 @@ colorPicker.addColorChangedListener((color, event) -> {
 #### Show with Dialog
 
 ``` java
-Color color = ColorPicker.showDialog(this, "Pick Color", null);
+Color color = ColorPicker.showDialog(this, "Pick Color", Color.WHITE);
 
 if (color != null) {
     // color selected
