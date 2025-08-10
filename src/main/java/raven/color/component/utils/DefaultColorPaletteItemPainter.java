@@ -29,12 +29,16 @@ public class DefaultColorPaletteItemPainter implements ColorPaletteItemPainter {
         return 3;
     }
 
+    protected float getArc() {
+        return 8;
+    }
+
     @Override
     public void paintItem(Graphics g, Color color, int width, int height, boolean isSelected, boolean hasFocus) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(color);
-        float arc = UIScale.scale(5);
+        float arc = Math.max(UIScale.scale(getArc() - getItemBorderSize()), 0);
         g2.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
 
         int border = UIScale.scale(getItemBorderSize());
@@ -50,7 +54,7 @@ public class DefaultColorPaletteItemPainter implements ColorPaletteItemPainter {
             return;
         }
         g2.setComposite(AlphaComposite.SrcOver.derive(0.3f));
-        float arc = UIScale.scale(5 + getItemBorderSize());
+        float arc = UIScale.scale(getArc());
         g2.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
     }
 }

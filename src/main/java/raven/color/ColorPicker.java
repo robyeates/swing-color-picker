@@ -31,7 +31,7 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
     }
 
     public ColorPicker(ColorPickerModel model) {
-        init(model, Color.WHITE);
+        init(model, model.getSelectedColor());
     }
 
     private void init(ColorPickerModel model, Color initialColor) {
@@ -57,6 +57,10 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
             add(createColorPalette());
         }
         model.setSelectedColor(initialColor);
+
+        if (colorField != null) {
+            colorField.colorChanged(model.getSelectedColor());
+        }
     }
 
     private Component createLeftComponent() {

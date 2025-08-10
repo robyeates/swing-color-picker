@@ -72,6 +72,7 @@ public class ColorPaletteComponent extends JComponent {
     public void setColorData(ColorPaletteData colorData) {
         this.colorData = colorData;
         repaint();
+        revalidate();
     }
 
     public ColorPaletteItemPainter getItemPainter() {
@@ -81,6 +82,7 @@ public class ColorPaletteComponent extends JComponent {
     public void setItemPainter(ColorPaletteItemPainter itemPainter) {
         this.itemPainter = itemPainter;
         repaint();
+        revalidate();
     }
 
     public int getSelectedIndex() {
