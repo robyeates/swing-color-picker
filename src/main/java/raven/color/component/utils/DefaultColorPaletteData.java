@@ -6,14 +6,13 @@ import java.util.List;
 
 public class DefaultColorPaletteData implements ColorPaletteData {
 
-    private List<Color> listColors;
+    protected List<Color> listColors = new ArrayList<>();
 
     public DefaultColorPaletteData() {
         init();
     }
 
-    private void init() {
-        listColors = new ArrayList<>();
+    protected void init() {
 
         listColors.add(new Color(239, 68, 68));   // red-500
         listColors.add(new Color(249, 115, 22));  // orange-500

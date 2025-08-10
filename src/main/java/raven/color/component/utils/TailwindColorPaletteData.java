@@ -1,17 +1,10 @@
 package raven.color.component.utils;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class TailwindColorPaletteData implements ColorPaletteData {
+public class TailwindColorPaletteData extends DefaultColorPaletteData {
 
-    protected List<Color> listColors = new ArrayList<>();
-
-    public TailwindColorPaletteData() {
-        init();
-    }
-
+    @Override
     protected void init() {
         // The Tailwind CSS v1.0 color palettes
 
@@ -124,28 +117,6 @@ public class TailwindColorPaletteData implements ColorPaletteData {
         listColors.add(new Color(55, 65, 81));    // gray-700
         listColors.add(new Color(31, 41, 55));    // gray-800
         listColors.add(new Color(17, 24, 39));    // gray-900
-    }
-
-    @Override
-    public void add(Color color) {
-    }
-
-    @Override
-    public void remove(Color color) {
-    }
-
-    @Override
-    public void clear() {
-    }
-
-    @Override
-    public int size() {
-        return listColors.size();
-    }
-
-    @Override
-    public Color get(int index) {
-        return listColors.get(index);
     }
 
     public ColorPaletteItemPainter getPainter() {
