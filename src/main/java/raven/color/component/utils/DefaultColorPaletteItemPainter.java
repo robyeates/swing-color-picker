@@ -43,7 +43,7 @@ public class DefaultColorPaletteItemPainter implements ColorPaletteItemPainter {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(color);
-        float arc = Math.max(UIScale.scale(getArc() - getItemBorderSize()), 0);
+        float arc = Math.min(UIScale.scale(getArc()), Math.min(width, height));
         g2.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
 
         int border = UIScale.scale(getItemBorderSize());
@@ -65,12 +65,14 @@ public class DefaultColorPaletteItemPainter implements ColorPaletteItemPainter {
 
         g2.setComposite(AlphaComposite.SrcOver.derive(0.35f));
         int border = UIScale.scale(getItemBorderSize());
-        float arc = UIScale.scale(getArc());
-
+        float arc = UIScale.scale(getArc() + getItemBorderSize() * 2);
+        arc = Math.min(arc, Math.min(width, height));
         Area area = new Area(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
-        float inArc = Math.max(arc - border, 0);
+        int inWidth = width - border * 2;
+        int inHeight = height - border * 2;
+        float inArc = Math.min(UIScale.scale(getArc()), Math.min(inWidth, inHeight));
 
-        area.subtract(new Area(new RoundRectangle2D.Float(border, border, width - border * 2, height - border * 2, inArc, inArc)));
+        area.subtract(new Area(new RoundRectangle2D.Float(border, border, inWidth, inHeight, inArc, inArc)));
         g2.fill(area);
     }
 }
