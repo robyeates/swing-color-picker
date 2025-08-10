@@ -2,6 +2,8 @@ package raven.color;
 
 import net.miginfocom.swing.MigLayout;
 import raven.color.component.*;
+import raven.color.component.utils.DefaultColorPaletteData;
+import raven.color.component.utils.DefaultColorPaletteItemPainter;
 import raven.color.event.ColorChangeEvent;
 import raven.color.event.ColorChangedListener;
 
@@ -16,6 +18,9 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
     private ColorAlphaComponent colorAlphaComponent;
     private ColorPreview colorPreview;
     private ColorField colorField;
+    private ColorPaletteComponent colorPalette;
+
+    private boolean colorPaletteEnabled = true;
 
     public ColorPicker() {
         this(new ColorPickerModel());
@@ -26,11 +31,11 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
     }
 
     public ColorPicker(ColorPickerModel model) {
-        init(model, Color.WHITE);
+        init(model, model.getSelectedColor());
     }
 
     private void init(ColorPickerModel model, Color initialColor) {
-        setLayout(new MigLayout("wrap,fillx,gap 0,insets 0", "[fill,280]"));
+        setLayout(new MigLayout("wrap,fillx,gap 0,insets 0 0 5 0", "[fill,280]"));
 
         setModel(model);
         colorComponent = new ColorComponent(this);
@@ -48,7 +53,14 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
         add(panel);
 
         add(colorField);
+        if (isColorPaletteEnabled()) {
+            add(createColorPalette());
+        }
         model.setSelectedColor(initialColor);
+
+        if (colorField != null) {
+            colorField.colorChanged(model.getSelectedColor());
+        }
     }
 
     private Component createLeftComponent() {
@@ -60,6 +72,19 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
         panel.add(colorPreview, "width 33,height 33");
 
         return panel;
+    }
+
+    private Component createColorPalette() {
+        if (colorPalette == null) {
+            colorPalette = new ColorPaletteComponent(new DefaultColorPaletteData(), new DefaultColorPaletteItemPainter());
+            colorPalette.addChangeListener(e -> {
+                Color color = colorPalette.getColorAt(colorPalette.getSelectedIndex());
+                if (color != null) {
+                    getModel().setSelectedColor(color);
+                }
+            });
+        }
+        return colorPalette;
     }
 
     public ColorPickerModel getModel() {
@@ -88,6 +113,35 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
         getModel().setSelectedColor(color);
     }
 
+    public boolean isColorPaletteEnabled() {
+        return colorPaletteEnabled;
+    }
+
+    public void setColorPaletteEnabled(boolean enabled) {
+        if (this.colorPaletteEnabled != enabled) {
+            this.colorPaletteEnabled = enabled;
+            if (!enabled) {
+                if (colorPalette != null) {
+                    remove(colorPalette);
+                    revalidate();
+                }
+            } else {
+                add(createColorPalette());
+                revalidate();
+            }
+        }
+    }
+
+    public ColorPaletteComponent getColorPalette() {
+        return colorPalette;
+    }
+
+    public void applyColorPaletteType(ColorPaletteType type) {
+        if (type != null) {
+            type.apply(this);
+        }
+    }
+
     public void addColorChangedListener(ColorChangedListener listener) {
         listenerList.add(ColorChangedListener.class, listener);
     }
@@ -98,6 +152,10 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
 
     public static Color showDialog(Component component, String title, Color initialColor) {
         ColorPicker colorPicker = new ColorPicker(initialColor != null ? initialColor : Color.WHITE);
+        return showDialog(component, title, colorPicker);
+    }
+
+    public static Color showDialog(Component component, String title, ColorPicker colorPicker) {
         int option = JOptionPane.showConfirmDialog(component, colorPicker,
                 title,
                 JOptionPane.OK_CANCEL_OPTION,
