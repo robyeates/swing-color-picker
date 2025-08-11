@@ -109,7 +109,8 @@ public class ColorField extends JComponent implements PropertyChangeListener {
             public Object stringToValue(String string) throws ParseException {
                 if (string != null) {
                     string = string.trim();
-                    if (string.matches("^[0-9a-fA-F]{8}$")) {
+                    string = string.startsWith("#") ? string.substring(1) : string;
+                    if (string.matches("^[0-9a-fA-F]{6,8}$")) {
                         return string.toUpperCase();
                     }
                 }
@@ -154,15 +155,36 @@ public class ColorField extends JComponent implements PropertyChangeListener {
     }
 
     private Color decodeRGBA(String hex) {
-        if (hex == null || !hex.matches("^[0-9a-fA-F]{8}$")) {
+        if (hex == null) {
+            throw new IllegalArgumentException("Invalid RGBA color format: null");
+        }
+
+        hex = hex.trim();
+        if (hex.startsWith("#")) {
+            hex = hex.substring(1);
+        }
+
+        // Validate hex length and characters
+        if (!hex.matches("^[0-9a-fA-F]{6,8}$")) {
             throw new IllegalArgumentException("Invalid RGBA color format");
         }
+
+        // Normalize hex string to 8 digits by handling 6 or 7 digit cases
+        if (hex.length() == 6) {
+            hex += "FF"; // full opacity
+        } else if (hex.length() == 7) {
+            // last digit is half alpha, pad with 'F'
+            hex = hex.substring(0, 6) + hex.charAt(6) + "F";
+        }
+
+        // Parse the 8-digit RGBA hex into int
         int rgba = (int) Long.parseLong(hex, 16);
+
         return new Color(
-                (rgba >> 24) & 0xFF,   // Red
-                (rgba >> 16) & 0xFF,     // Green
-                (rgba >> 8) & 0xFF,      // Blue
-                rgba & 0xFF              // Alpha
+                (rgba >> 24) & 0xFF,  // Red
+                (rgba >> 16) & 0xFF,  // Green
+                (rgba >> 8) & 0xFF,   // Blue
+                rgba & 0xFF           // Alpha
         );
     }
 
