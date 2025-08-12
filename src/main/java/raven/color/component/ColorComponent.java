@@ -3,12 +3,12 @@ package raven.color.component;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
 import raven.color.ColorPicker;
-import raven.color.ColorPickerUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -125,10 +125,15 @@ public class ColorComponent extends JComponent {
         g2.translate(x + lx - size / 2f, y + ly - size / 2f);
 
         g2.setColor(UIManager.getColor("Component.borderColor"));
-        g2.fill(ColorPickerUtils.createShape(size, 0.6f, 0f));
+        g2.fill(new Ellipse2D.Float(0, 0, size, size));
 
         g2.setColor(Color.WHITE);
-        g2.fill(ColorPickerUtils.createShape(size, 0.6f, UIScale.scale(1f)));
+        float border = UIScale.scale(1f);
+        g2.fill(new Ellipse2D.Float(border, border, size - border * 2, size - border * 2));
+
+        g2.setColor(new Color(colorPicker.getModel().getSelectedColor().getRGB()));
+        float borderIn = size * 0.25f;
+        g2.fill(new Ellipse2D.Float(borderIn, borderIn, size - borderIn * 2, size - borderIn * 2));
     }
 
     private Point2D.Float colorToPoint(Color color) {
