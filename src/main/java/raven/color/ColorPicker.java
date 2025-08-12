@@ -46,10 +46,10 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
         JPanel panel = new JPanel(new MigLayout("wrap 2,fillx,insets 0,gap 3", "7[grow 0,fill][fill]"));
 
         panel.setOpaque(false);
-        add(colorComponent, "height 180");
+        add(colorComponent, "height 50:180:");
         panel.add(createLeftComponent(), "span 1 2");
-        panel.add(colorHueComponent, "height 20");
-        panel.add(colorAlphaComponent, "height 20");
+        panel.add(colorHueComponent, "height 20!");
+        panel.add(colorAlphaComponent, "height 20!");
         add(panel);
 
         add(colorField);
