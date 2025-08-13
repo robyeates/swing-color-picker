@@ -30,15 +30,15 @@ public class ColorAlphaComponent extends SliderColor {
 
     @Override
     protected void valueChanged(float v) {
-        Color color = colorPicker.getModel().getSelectedColor();
+        Color color = colorPicker.getSelectionModel().getSelectedColor();
         if (color != null) {
-            colorPicker.getModel().setSelectedColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (v * 255f)), false);
+            colorPicker.getSelectionModel().setSelectedColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (v * 255f)), false);
         }
     }
 
     @Override
     protected float getValue() {
-        Color color = colorPicker.getModel().getSelectedColor();
+        Color color = colorPicker.getSelectionModel().getSelectedColor();
         if (color == null) {
             return 1f;
         }
@@ -58,7 +58,7 @@ public class ColorAlphaComponent extends SliderColor {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.drawImage(img, x, y, null);
-            g2.setPaint(new GradientPaint(x, y, new Color(255, 255, 255, 0), x + width, y, Color.getHSBColor(colorPicker.getModel().getHue(), 1f, 1f)));
+            g2.setPaint(new GradientPaint(x, y, new Color(255, 255, 255, 0), x + width, y, Color.getHSBColor(colorPicker.getSelectionModel().getHue(), 1f, 1f)));
             g2.fill(new RoundRectangle2D.Float(x, y, width, height, height, height));
             g2.dispose();
         }

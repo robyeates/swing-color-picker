@@ -28,12 +28,12 @@ public class ColorHueComponent extends SliderColor {
 
     @Override
     protected void valueChanged(float v) {
-        colorPicker.getModel().setHue(v);
+        colorPicker.getSelectionModel().setHue(v);
     }
 
     @Override
     protected float getValue() {
-        return colorPicker.getModel().getHue();
+        return colorPicker.getSelectionModel().getHue();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ColorHueComponent extends SliderColor {
         int height = getHeight() - (insets.top + insets.bottom);
 
         // draw image
-        BufferedImage image = colorPicker.getModel().getHueImage(width, height, height);
+        BufferedImage image = colorPicker.getSelectionModel().getHueImage(width, height, height);
         if (image != null) {
             g.drawImage(image, x, y, null);
         }

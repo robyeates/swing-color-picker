@@ -80,7 +80,7 @@ public class TestColor extends JFrame {
 
         JButton cmdShowDialog = new JButton("show as dialog");
         cmdShowDialog.addActionListener(e -> {
-            ColorPicker cp = new ColorPicker(colorPicker.getModel());
+            ColorPicker cp = new ColorPicker(colorPicker.getSelectionModel());
             cp.setColorPaletteEnabled(chEnablePalette.isSelected());
             applyColorStyle(cp);
 

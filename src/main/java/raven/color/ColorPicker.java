@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class ColorPicker extends JPanel implements ColorChangedListener {
 
-    private ColorPickerModel model;
+    private ColorPickerSelectionModel selectionModel;
     private ColorComponent colorComponent;
     private ColorHueComponent colorHueComponent;
     private ColorAlphaComponent colorAlphaComponent;
@@ -23,21 +23,21 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
     private boolean colorPaletteEnabled = true;
 
     public ColorPicker() {
-        this(new ColorPickerModel());
+        this(new ColorPickerSelectionModel());
     }
 
     public ColorPicker(Color initialColor) {
-        init(new ColorPickerModel(), initialColor);
+        init(new ColorPickerSelectionModel(), initialColor);
     }
 
-    public ColorPicker(ColorPickerModel model) {
-        init(model, model.getSelectedColor());
+    public ColorPicker(ColorPickerSelectionModel selectionModel) {
+        init(selectionModel, selectionModel.getSelectedColor());
     }
 
-    private void init(ColorPickerModel model, Color initialColor) {
+    private void init(ColorPickerSelectionModel selectionModel, Color initialColor) {
         setLayout(new MigLayout("wrap,fillx,gap 0,insets 0 0 5 0", "[fill,280]"));
 
-        setModel(model);
+        setSelectionModel(selectionModel);
         colorComponent = new ColorComponent(this);
         colorHueComponent = new ColorHueComponent(this);
         colorAlphaComponent = new ColorAlphaComponent(this);
@@ -56,10 +56,10 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
         if (isColorPaletteEnabled()) {
             add(createColorPalette());
         }
-        model.setSelectedColor(initialColor);
+        selectionModel.setSelectedColor(initialColor);
 
         if (colorField != null) {
-            colorField.colorChanged(model.getSelectedColor());
+            colorField.colorChanged(selectionModel.getSelectedColor());
         }
     }
 
@@ -80,37 +80,37 @@ public class ColorPicker extends JPanel implements ColorChangedListener {
             colorPalette.addChangeListener(e -> {
                 Color color = colorPalette.getColorAt(colorPalette.getSelectedIndex());
                 if (color != null) {
-                    getModel().setSelectedColor(color);
+                    getSelectionModel().setSelectedColor(color);
                 }
             });
         }
         return colorPalette;
     }
 
-    public ColorPickerModel getModel() {
-        return model;
+    public ColorPickerSelectionModel getSelectionModel() {
+        return selectionModel;
     }
 
-    public void setModel(ColorPickerModel model) {
-        if (model == null) {
-            throw new IllegalArgumentException("color model can't be null");
+    public void setSelectionModel(ColorPickerSelectionModel selectionModel) {
+        if (selectionModel == null) {
+            throw new IllegalArgumentException("color selectionModel can't be null");
         }
-        if (this.model != model) {
-            ColorPickerModel old = this.model;
+        if (this.selectionModel != selectionModel) {
+            ColorPickerSelectionModel old = this.selectionModel;
             if (old != null) {
                 old.removeChangeListener(this);
             }
-            this.model = model;
-            this.model.addChangeListener(this);
+            this.selectionModel = selectionModel;
+            this.selectionModel.addChangeListener(this);
         }
     }
 
     public Color getSelectedColor() {
-        return getModel().getSelectedColor();
+        return getSelectionModel().getSelectedColor();
     }
 
     public void setSelectedColor(Color color) {
-        getModel().setSelectedColor(color);
+        getSelectionModel().setSelectedColor(color);
     }
 
     public boolean isColorPaletteEnabled() {

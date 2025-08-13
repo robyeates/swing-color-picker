@@ -9,7 +9,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
-public class ColorPickerModel {
+public class ColorPickerSelectionModel {
 
     protected EventListenerList listenerList = new EventListenerList();
     private BufferedImage hueImage;
@@ -21,7 +21,7 @@ public class ColorPickerModel {
     private float oldHueArc;
     private float oldColorArc;
 
-    public ColorPickerModel() {
+    public ColorPickerSelectionModel() {
     }
 
     public BufferedImage getHueImage(int width, int height, float arc) {

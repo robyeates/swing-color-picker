@@ -44,8 +44,8 @@ public class ColorComponent extends JComponent {
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
 
-        if (selectedPoint == null && (colorPicker.getModel() != null && colorPicker.getModel().getSelectedColor() != null)) {
-            selectedPoint = colorToPoint(colorPicker.getModel().getSelectedColor());
+        if (selectedPoint == null && (colorPicker.getSelectionModel() != null && colorPicker.getSelectionModel().getSelectedColor() != null)) {
+            selectedPoint = colorToPoint(colorPicker.getSelectionModel().getSelectedColor());
         }
     }
 
@@ -77,8 +77,8 @@ public class ColorComponent extends JComponent {
         int width = getWidth() - (insets.left + insets.right);
         int height = getHeight() - (insets.top + insets.bottom);
         selectedPoint = toPoint(point, width, height);
-        Color color = pointToColor(selectedPoint, colorPicker.getModel().getHue());
-        Color oldColor = colorPicker.getModel().getSelectedColor();
+        Color color = pointToColor(selectedPoint, colorPicker.getSelectionModel().getHue());
+        Color oldColor = colorPicker.getSelectionModel().getSelectedColor();
         if (oldColor != null) {
             int alpha = oldColor.getAlpha();
             if (alpha != 255) {
@@ -87,7 +87,7 @@ public class ColorComponent extends JComponent {
         }
         try {
             notifyRepaint = false;
-            colorPicker.getModel().setSelectedColor(color, false);
+            colorPicker.getSelectionModel().setSelectedColor(color, false);
         } finally {
             repaint();
             notifyRepaint = true;
@@ -104,7 +104,7 @@ public class ColorComponent extends JComponent {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        BufferedImage image = colorPicker.getModel().getColorImage(width, height, UIScale.scale(10f));
+        BufferedImage image = colorPicker.getSelectionModel().getColorImage(width, height, UIScale.scale(10f));
         if (image != null) {
             g2.drawImage(image, x, y, null);
         }
@@ -131,7 +131,7 @@ public class ColorComponent extends JComponent {
         float border = UIScale.scale(1f);
         g2.fill(new Ellipse2D.Float(border, border, size - border * 2, size - border * 2));
 
-        g2.setColor(new Color(colorPicker.getModel().getSelectedColor().getRGB()));
+        g2.setColor(new Color(colorPicker.getSelectionModel().getSelectedColor().getRGB()));
         float borderIn = size * 0.25f;
         g2.fill(new Ellipse2D.Float(borderIn, borderIn, size - borderIn * 2, size - borderIn * 2));
     }
