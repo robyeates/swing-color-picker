@@ -72,7 +72,7 @@ public class ColorField extends JComponent implements PropertyChangeListener {
 
             @Override
             public void focusGained(FocusEvent e) {
-                txt.selectAll();
+                SwingUtilities.invokeLater(txt::selectAll);
             }
         });
         return txt;
@@ -82,7 +82,12 @@ public class ColorField extends JComponent implements PropertyChangeListener {
         JFormattedTextField txt = new JFormattedTextField(createHexFormatter());
         txt.addPropertyChangeListener("value", this);
         txt.setHorizontalAlignment(SwingConstants.CENTER);
-
+        txt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                SwingUtilities.invokeLater(txt::selectAll);
+            }
+        });
         return txt;
     }
 
