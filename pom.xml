@@ -9,14 +9,14 @@
     <version>1.0.0</version>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>24</maven.compiler.source>
+        <maven.compiler.target>24</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <name>Java Swing Color Picker</name>
-    <description>Java Swing color picker built with FlatLaf and MigLayout</description>
-    <url>https://github.com/DJ-Raven/swing-color-picker</url>
+    <description>Java Swing color picker built with FlatLaf and MigLayout, simplified</description>
+    <url>https://github.com/robyeates</url>
 
     <licenses>
         <license>
@@ -27,17 +27,18 @@
 
     <developers>
         <developer>
+            <roles>
+                <role>Creator!</role>
+            </roles>
             <name>Raven Laing</name>
             <organization>com.github.dj-raven</organization>
             <organizationUrl>https://github.com/dj-raven</organizationUrl>
         </developer>
+        <developer>
+            <name>Robert Yeates</name>
+            <organizationUrl>https://github.com/robyeates</organizationUrl>
+        </developer>
     </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/dj-raven/swing-color-picker.git</connection>
-        <developerConnection>scm:git:ssh://github.com:dj-raven/swing-color-picker.git</developerConnection>
-        <url>https://github.com/dj-raven/swing-color-picker</url>
-    </scm>
 
     <dependencies>
         <dependency>
@@ -56,61 +57,5 @@
             <version>5.3</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.7.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>central</publishingServerId>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.10.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
